@@ -1,0 +1,74 @@
+# This project's data on Spotify was downloaded from Kaggle.
+# I then created the table below to insert Spotify data into.
+# Lastly, I performed analytics on the data using SQL. 
+
+#Creating the table: 
+CREATE TABLE BIT_DB0.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness decimal(8,7) NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL );
+
+#Then I inserted the Spotify Data .csv into the table.
+#Next, I explored the data using the following SQL. 
+
+#To see a brief overview of the data I wanted to see:
+
+SELECT * FROM BIT_DB0.Spotifydata;
+
+#What is the average danceability by artist and track?
+
+SELECT artist_name, track_name, AVG(danceability)
+FROM BIT_DB0.Spotifydata
+GROUP BY artist_name, track_name;
+
+#Who are the top 10 artists based on popularity?
+
+SELECT artist_name, popularity
+FROM BIT_DB0.Spotifydata
+ORDER BY popularity desc
+LIMIT 10;
+
+#What artist released the longest song?
+
+SELECT artist_name, track_name, MAX(duration_ms)
+FROM BIT_DB0.Spotifydata
+GROUP BY artist_name, track_name
+ORDER BY duration_ms desc
+LIMIT 1;
+
+#What is the average danceability for the 10 most popular songs?
+
+SELECT artist_name, track_name, popularity, AVG(danceability)
+FROM BIT_DB0.Spotifydata
+GROUP BY track_name
+ORDER BY popularity desc
+LIMIT 10;
+
+# Are there any songs not written in 4/4 tempo, and if so, which ones?
+
+SELECT artist_name, track_name, time_signature
+FROM BIT_DB0.Spotifydata
+WHERE time_signature != 4
+GROUP BY track_name;
+
+# What is the average tempo of the songs written in 3?
+
+SELECT artist_name, track_name, time_signature, AVG(tempo)
+FROM BIT_DB0.Spotifydata
+WHERE time_signature != 4
+GROUP BY track_name;
